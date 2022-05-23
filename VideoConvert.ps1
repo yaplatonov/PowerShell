@@ -26,7 +26,7 @@ Get-ChildItem -Path $path -Recurse -Force -Include $types |
     If ((Test-Path $out_file) -eq $True) {
       Remove-Item $_.FullName -Force -Verbose
       ### Write some logs
-      $log = (Get-Date -Format "MM/dd/yyyy HH:mm") + " " + $_.FullName + " : converted."
+      $log = (Get-Date -Format "dd/MM/yyyy HH:mm") + " " + $_.FullName + " : converted."
       Write-Output $log >> $log_file
     }
   }

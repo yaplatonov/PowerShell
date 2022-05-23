@@ -1,6 +1,8 @@
 ﻿$path = "D:\_Downloads\_del\"
 $ffmpeg_exe = "D:\ffmpeg\ffmpeg.exe"
-$ffmpeg_params = " -c:v -vf scale=-2:480 libx264 -preset ultrafast -crf 28 -c:a aac -b:a 128k  "
+### Scale to 480p , Height -2 (on -1 got error "height not divisible by 2")
+### Нужно максимально быстро и в плохом качестве сделать видео, что бы не воровали.
+$ffmpeg_params = " -vf scale=-2:480 -c:v libx264 -preset ultrafast -crf 28 -c:a aac -b:a 128k  "
 
 $types = @("*.avi","*.mkv","*.mp4")
 
@@ -23,8 +25,10 @@ Get-ChildItem -Path $path -Recurse -Force -Include $types |
     #Write-Output $ffmpeg_cmd
     cmd /c $ffmpeg_cmd
     
-    #Write some logs
-    $log = (Get-Date -Format "MM/dd/yyyy HH:mm") + " " + $_.BaseName + " converted."
-    Write-Output $log >> $log_file
-    Remove-Item $_.FullName -Force -Verbose
-  }
+    If ((Test-Path $out_file) -eq $True) {
+        Remove-Item $_.FullName -Force -Verbose
+        ### Write some logs
+        $log = (Get-Date -Format "dd/MM/yyyy HH:mm") + " " + $_.FullName + " : converted."
+        Write-Output $log >> $log_file
+      }
+    }
